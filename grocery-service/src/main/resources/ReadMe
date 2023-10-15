@@ -1,0 +1,46 @@
+#Table Schema
+CREATE TABLE `user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(255) DEFAULT NULL,
+  `transaction_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `order_grocery_item` (
+  `order_id` int(11) NOT NULL,
+  `grocery_item_id` int(11) NOT NULL,
+  PRIMARY KEY (`order_id`,`grocery_item_id`),
+  KEY `grocery_item_id` (`grocery_item_id`),
+  CONSTRAINT `order_grocery_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
+  CONSTRAINT `order_grocery_item_ibfk_2` FOREIGN KEY (`grocery_item_id`) REFERENCES `grocery_items` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `grocery_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `inventory` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+
+#Curl
+curl --location --request POST 'http://localhost:8080/api/v1/user/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username":"vipul",
+    "password":"test123",
+    "is_admin":false
+}'
